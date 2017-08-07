@@ -1,0 +1,68 @@
+---
+title: "GMM o ASE"
+author: "YP"
+date: "8/7/2017"
+output: 
+    html_document:
+      keep_md: yes
+      theme: cerulean
+      number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Codes and Demos
+
+Example codes are in the `demo` folder at [github](https://github.com/youngser/gmmase).
+
+## `R` Package
+
+The latest `R` source package can be installed via `github` as
+
+```{r echo=TRUE, eval=FALSE}
+require(devtools)
+devtools::install_github("youngser/gmmase")
+```
+
+## Demos
+
+The package contains a couple of demos. They do
+
+1. generate or read a graph,
+2. do a graph spectral embedding,
+3. run `mclust`.
+
+```{r demo, eval=FALSE}
+library(gmmase)
+
+# a toy graph with 100 vertices
+demo(toygraph)
+
+# a larger graph with 10,000 vertices
+demo(usergraph)
+```
+
+To use a user graph, please try this (as shown in the code in `demo/usergraph.R`)
+
+```{r user, eval=FALSE}
+fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
+g <- read_graph(fname, format="edgelist") # please read igraph manual page for details.
+```
+
+The outputs of the demos are here:
+
+* [toygraph](http://www.cis.jhu.edu/~parky/gmmase/demo/toygraph.html)
+* [usergraph](http://www.cis.jhu.edu/~parky/gmmase/demo/usergraph.html)
+
+# Software and Hardware Information
+
+```{r vn,echo=TRUE, eval=TRUE}
+library(help='gmmase')
+sessionInfo()
+```
+
+-----
+*prepared by <youngser@jhu.edu> on `r date()`*
+
