@@ -31,12 +31,4 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
-
-# JPL repository
-JPL/
-
-# Data files
-out.txt
-eigenvalues.txt
-out_vectors.txt
-in_vectors.txt
+.Rproj.user
