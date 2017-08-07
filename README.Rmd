@@ -31,8 +31,8 @@ devtools::install_github("youngser/gmmase")
 The package contains a couple of demos. They do
 
 1. generate or read a graph,
-2. do a graph spectral embedding,
-3. run `mclust`.
+2. do a graph spectral embedding (ASE),
+3. run `mclust` (GMM).
 
 ```{r demo, eval=FALSE}
 library(gmmase)
