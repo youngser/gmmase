@@ -11,7 +11,11 @@ ptr <- function(g)
 #    tmp <- m[m != 0]
 #    nnz <- length(tmp)
 
-    W <- E(g)$weight
+    if (is.weighted(g)) {
+        W <- E(g)$weight
+    } else {
+        W <- rep(1,ecount)
+    }
     nnz <- length(W)
     rk <- rank(W)
     E(g)$weight <- rk * 2 / (nnz+1)
