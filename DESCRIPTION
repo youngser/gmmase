@@ -1,0 +1,15 @@
+Package: gmmase
+Type: Package
+Title: gmmase
+Version: 0.1.0
+Imports:
+    igraph,
+    Matrix,
+    mclust
+Author: Youngser Park
+Maintainer: Youngser Park <youngser@jhu.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
