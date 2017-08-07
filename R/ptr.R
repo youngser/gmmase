@@ -5,7 +5,7 @@ ptr <- function(g)
     if (class(g) == "igraph") {
         m <- as.matrix(g[])
     } else if (class(g) == "Matrix") {
-        m <- as.matrix(m)
+        m <- as.matrix(g)
     } else m <- g
 
     tmp <- m[m != 0]
