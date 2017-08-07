@@ -24,7 +24,7 @@ The package contains a couple of demos. They do
 
 1. generate or read a graph,
 2. do a _pass-to-rank_ for a directed graph (`PTR`, no-op for an unweighted graph),
-3. do a graph spectral embedding (`ASE`),
+3. do a graph spectral embedding (`ASE`, with a _diagonal augmentation_),
 4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an unweighted graph),
 5. run `mclust` (`GMM`).
 
@@ -80,5 +80,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 14:01:32 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 14:03:47 2017*
 
