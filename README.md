@@ -9,9 +9,9 @@ Department of Applied Mathematics and Statistics <br /> Johns Hopkins University
 This is an `R` package that does
 
 1. generate or read a graph,
-2. do a _pass-to-rank_ for a directed graph (`PTR`, no-op for an unweighted graph),
+2. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
 3. do a graph spectral embedding (`ASE`, with a _diagonal augmentation_),
-4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an unweighted graph),
+4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an undirected graph),
 5. run `mclust` (`GMM`).
 
 ## `R` Package
@@ -83,5 +83,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 14:08:43 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 16:28:25 2017*
 
