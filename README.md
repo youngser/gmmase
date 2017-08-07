@@ -1,6 +1,6 @@
 # GMM o ASE
-YP  
-8/7/2017  
+Department of Applied Mathematics and Statistics <br /> Johns Hopkins University  
+`r date()`  
 
 
 
@@ -80,5 +80,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 13:38:39 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 13:41:51 2017*
 

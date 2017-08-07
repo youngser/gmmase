@@ -1,10 +1,11 @@
 ---
 title: "GMM o ASE"
-author: "YP"
-date: "8/7/2017"
+author: "Department of Applied Mathematics and Statistics <br /> Johns Hopkins University"
+date: "`r date()`"
 output: 
     html_document:
       keep_md: yes
+      css: ~/RFolder/pandoc.css
       theme: cerulean
       number_sections: yes
 ---
