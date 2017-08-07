@@ -35,7 +35,7 @@ library(gmmase)
 # a toy graph with 100 vertices
 demo(toygraph)
 
-# a larger graph with 10,000 vertices
+# a larger graph with 10,000 vertices: may take a few minutes, depending on the system
 demo(usergraph)
 ```
 
@@ -80,5 +80,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 13:57:30 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 14:01:32 2017*
 
