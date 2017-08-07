@@ -6,7 +6,13 @@ Department of Applied Mathematics and Statistics <br /> Johns Hopkins University
 
 # Codes and Demos
 
-Example codes are in the `demo` folder at [github](https://github.com/youngser/gmmase).
+This is an `R` package that does
+
+1. generate or read a graph,
+2. do a _pass-to-rank_ for a directed graph (`PTR`, no-op for an unweighted graph),
+3. do a graph spectral embedding (`ASE`, with a _diagonal augmentation_),
+4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an unweighted graph),
+5. run `mclust` (`GMM`).
 
 ## `R` Package
 
@@ -20,13 +26,7 @@ devtools::install_github("youngser/gmmase")
 
 ## Demos
 
-The package contains a couple of demos. They do
-
-1. generate or read a graph,
-2. do a _pass-to-rank_ for a directed graph (`PTR`, no-op for an unweighted graph),
-3. do a graph spectral embedding (`ASE`, with a _diagonal augmentation_),
-4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an unweighted graph),
-5. run `mclust` (`GMM`).
+Example codes are in the `demo` folder at [github](https://github.com/youngser/gmmase), which can be run via
 
 
 ```r
@@ -44,6 +44,8 @@ The outputs of the demos are here:
 * [toygraph](http://www.cis.jhu.edu/~parky/gmmase/demo/toygraph.html)
 * [usergraph](http://www.cis.jhu.edu/~parky/gmmase/demo/usergraph.html)
 
+## User data
+
 To use a user graph, please try this (as shown in the code in `demo/usergraph.R`)
 
 
@@ -52,6 +54,7 @@ fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
 g <- read_graph(fname, format="edgelist") # please read igraph manual page for details, e.g., other graph formats it can handle, etc.
 ```
 
+and follow the rest of the demo procedures.
 
 # Software and Hardware Information
 
@@ -80,5 +83,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 14:03:47 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 14:08:43 2017*
 

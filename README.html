@@ -119,14 +119,21 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">GMM o ASE</h1>
 <h4 class="author"><em>Department of Applied Mathematics and Statistics <br /> Johns Hopkins University</em></h4>
-<h4 class="date"><em>Mon Aug 7 14:03:47 2017</em></h4>
+<h4 class="date"><em>Mon Aug 7 14:08:43 2017</em></h4>
 
 </div>
 
 
 <div id="codes-and-demos" class="section level1">
 <h1><span class="header-section-number">1</span> Codes and Demos</h1>
-<p>Example codes are in the <code>demo</code> folder at <a href="https://github.com/youngser/gmmase">github</a>.</p>
+<p>This is an <code>R</code> package that does</p>
+<ol style="list-style-type: decimal">
+<li>generate or read a graph,</li>
+<li>do a <em>pass-to-rank</em> for a directed graph (<code>PTR</code>, no-op for an unweighted graph),</li>
+<li>do a graph spectral embedding (<code>ASE</code>, with a <em>diagonal augmentation</em>),</li>
+<li>do a dimension reduction (<code>ZG</code>) and merge left and right vectors (no-op for an unweighted graph),</li>
+<li>run <code>mclust</code> (<code>GMM</code>).</li>
+</ol>
 <div id="r-package" class="section level2">
 <h2><span class="header-section-number">1.1</span> <code>R</code> Package</h2>
 <p>The latest <code>R</code> source package can be installed via <code>github</code> as</p>
@@ -135,14 +142,7 @@ devtools::install_github(&quot;youngser/gmmase&quot;)</code></pre>
 </div>
 <div id="demos" class="section level2">
 <h2><span class="header-section-number">1.2</span> Demos</h2>
-<p>The package contains a couple of demos. They do</p>
-<ol style="list-style-type: decimal">
-<li>generate or read a graph,</li>
-<li>do a <em>pass-to-rank</em> for a directed graph (<code>PTR</code>, no-op for an unweighted graph),</li>
-<li>do a graph spectral embedding (<code>ASE</code>, with a <em>diagonal augmentation</em>),</li>
-<li>do a dimension reduction (<code>ZG</code>) and merge left and right vectors (no-op for an unweighted graph),</li>
-<li>run <code>mclust</code> (<code>GMM</code>).</li>
-</ol>
+<p>Example codes are in the <code>demo</code> folder at <a href="https://github.com/youngser/gmmase">github</a>, which can be run via</p>
 <pre class="r"><code>library(gmmase)
 
 # a toy graph with 100 vertices
@@ -155,9 +155,13 @@ demo(usergraph)</code></pre>
 <li><a href="http://www.cis.jhu.edu/~parky/gmmase/demo/toygraph.html">toygraph</a></li>
 <li><a href="http://www.cis.jhu.edu/~parky/gmmase/demo/usergraph.html">usergraph</a></li>
 </ul>
+</div>
+<div id="user-data" class="section level2">
+<h2><span class="header-section-number">1.3</span> User data</h2>
 <p>To use a user graph, please try this (as shown in the code in <code>demo/usergraph.R</code>)</p>
 <pre class="r"><code>fname &lt;- readline(prompt=&quot;Enter a file name (e.g., /path/edgelist.txt): &quot;)
 g &lt;- read_graph(fname, format=&quot;edgelist&quot;) # please read igraph manual page for details, e.g., other graph formats it can handle, etc.</code></pre>
+<p>and follow the rest of the demo procedures.</p>
 </div>
 </div>
 <div id="software-and-hardware-information" class="section level1">
@@ -180,7 +184,7 @@ sessionInfo()</code></pre>
 ##  [9] rmarkdown_1.6   knitr_1.16      stringr_1.2.0   digest_0.6.12  
 ## [13] evaluate_0.10</code></pre>
 <hr />
-<p><em>prepared by <a href="mailto:youngser@jhu.edu">youngser@jhu.edu</a> on Mon Aug 7 14:03:47 2017</em></p>
+<p><em>prepared by <a href="mailto:youngser@jhu.edu">youngser@jhu.edu</a> on Mon Aug 7 14:08:43 2017</em></p>
 </div>
 
 
