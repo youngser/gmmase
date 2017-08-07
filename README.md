@@ -49,7 +49,7 @@ To use a user graph, please try this (as shown in the code in `demo/usergraph.R`
 
 ```r
 fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-g <- read_graph(fname, format="edgelist") # please read igraph manual page for details, e.g., other graph types it can handle, etc.
+g <- read_graph(fname, format="edgelist") # please read igraph manual page for details, e.g., other graph formats it can handle, etc.
 ```
 
 
@@ -80,5 +80,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 13:37:16 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 13:38:39 2017*
 
