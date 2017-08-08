@@ -58,9 +58,9 @@ Y <- gmmase(g, dmax=20, add.weight=FALSE, use.ptr=TRUE, embed="ASE", clustering=
 where
 
 * `embed` can be either "ASE" or "LSE", and
-* `clustering` can be either "GMM" or "Kmeans"=="pamk", where
+* `clustering` can be either "GMM" or "Kmeans", where
     + "GMM" yields BIC curve, and
-    + "Kmeans"=="pamk" yields ASW curve.
+    + "Kmeans" yields ASW curve.
 
 
 The output of `gmmase` function is a clustering label vector.
@@ -94,5 +94,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Tue Aug  8 15:55:34 2017*
+*prepared by <youngser@jhu.edu> on Tue Aug  8 15:56:34 2017*
 
