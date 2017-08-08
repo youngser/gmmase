@@ -1,8 +1,9 @@
-gmmase <- function(g, dmax=20, add.weight=FALSE, use.ptr=TRUE)
+gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", add.weight=FALSE, use.ptr=TRUE)
 {
     suppressPackageStartupMessages({
         library(igraph)
         library(mclust)
+        library(fpc)
     })
 
     cat("1. Finding an lcc...\n")
@@ -24,7 +25,11 @@ gmmase <- function(g, dmax=20, add.weight=FALSE, use.ptr=TRUE)
     }
 
     cat(paste0("3. Embedding the graph into dmax = ", dmax, "...\n"))
-    ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
+    if (embed=="ASE") {
+        ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
+    } else {
+        ase <- embed_laplacian_matrix(g,dmax,options=list(maxiter=10000))
+    }
 
     cat("4. Finding an elbow (dimension reduction)...")
     elb <- max(getElbows(ase$D)[1],2)
@@ -33,10 +38,19 @@ gmmase <- function(g, dmax=20, add.weight=FALSE, use.ptr=TRUE)
     Xhat2 <- ase$Y[,1:elb]
     Xhat <- cbind(Xhat1,Xhat2)
 
-    cat("5. Clustering using GMM...\n")
-    mc <- Mclust(Xhat)
-    plot(mc,what="BIC")
-    print(summary(mc))
+    cat("5. Clustering vertices...\n")
+    if (clustering=="GMM") {
+        mc <- Mclust(Xhat,2:9)
+        plot(mc,what="BIC")
+        print(summary(mc))
+        Y <- mc$class
+    } else {
+        usepam <- ifelse(vcount(g)>2000, FALSE, TRUE)
+        crit <- ifelse(vcount(g)>2000, "multiasw", "asw")
+        mc <- pamk(Xhat,2:9,usepam=usepam, criterion=crit)
+        plot(mc$crit, type="b")
+        Y <- mc$pamobj$cluster
+    }
 
-    return(mc)
+    return(Y)
 }

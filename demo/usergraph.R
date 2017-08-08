@@ -1,19 +1,20 @@
 suppressPackageStartupMessages({
     library(igraph)
-    library(mclust)
+    library(fpc)
     library(gmmase)
 })
 
 ## Please set this TRUE to use user's own graph!
-user <- TRUE
+user <- FALSE
 if (user) {
 #    fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-    fname <- "~/Dropbox/gmmase/data/g-10000.el"
+    fname <- "g-10000.el"
     g <- read_graph(fname, format="edgelist")
 } else {
     data(g10000)
 }
 summary(g)
 
-system.time(res <- gmmase(g, add.weight=TRUE))
-Y <- res$class
+# GMM for a large graph takes long time (e.g., it takes >5 minutes for a graph with 10K vertices), so "kmeans" is recommended.
+system.time(Y <- gmmase(g, add.weight=TRUE, clustering="kmeans"))
+table(Y)

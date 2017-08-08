@@ -1,14 +1,15 @@
 Package: gmmase
 Type: Package
-Title: GMM o ASE
+Title: Graph Spectral Clustering
 Version: 0.1.0
 Imports:
     igraph,
     Matrix,
-    mclust
+    mclust,
+    fpc
 Author: Youngser Park
 Maintainer: Youngser Park <youngser@jhu.edu>
-Description: More about what it does (maybe more than one line)
+Description: This package does a graph spectral clustering.
     Use four spaces when indenting paragraphs within the Description.
 License: GPL (>= 2)
 Encoding: UTF-8

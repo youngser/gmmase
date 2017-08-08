@@ -1,5 +1,5 @@
 ---
-title: "GMM o ASE"
+title: "Graph Spectral Clustering"
 author: "Department of Applied Mathematics and Statistics <br /> Johns Hopkins University"
 date: "`r date()`"
 output: 
@@ -20,9 +20,9 @@ This is an `R` package that does
 
 1. generate or read a graph,
 2. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
-3. do a _graph spectral embedding_ (`ASE`) with a _diagonal augmentation_,
+3. do a _graph spectral embedding_ (`ASE` or `LSE`) with a _diagonal augmentation_,
 4. do a _dimension reduction_ (`ZG`) and merge left and right vectors (no-op for an undirected graph),
-5. run `mclust` (`GMM`).
+5. cluster vertices (`GMM` or `Kmeans`).
 
 ## `R` Package
 
@@ -54,16 +54,15 @@ The outputs of the demos are here:
 
 ## User data
 
-To use a user graph, please try this (as shown in the code in `demo/usergraph.R`).
+To use a user graph, please try this (as shown in the code in `demo/usergraph.R`):
 
 ```{r user, eval=FALSE}
 fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
 g <- read_graph(fname, format="edgelist") 
-res <- gmmase(g)
-Y <- res$class # cluster labels
+Y <- gmmase(g, dmax=20, add.weight=FALSE, use.ptr=TRUE, embed="ASE", clustering="GMM")
 ```
 
-The output of `gmmase` function is in `Mclust` format. Please refer to the [manual page](https://www.rdocumentation.org/packages/mclust/versions/5.3/topics/Mclust) for the details of its components.
+The output of `gmmase` function is a clustering label vector.
 
 Also, please refer to the `igraph`'s [manual page](http://igraph.org/r/doc/read_graph.html) for details about other graph formats it can handle.
 
