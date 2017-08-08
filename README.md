@@ -10,8 +10,8 @@ This is an `R` package that does
 
 1. generate or read a graph,
 2. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
-3. do a graph spectral embedding (`ASE`, with a _diagonal augmentation_),
-4. do a dimension reduction (`ZG`) and merge left and right vectors (no-op for an undirected graph),
+3. do a _graph spectral embedding_ (`ASE`) with a _diagonal augmentation_,
+4. do a _dimension reduction_ (`ZG`) and merge left and right vectors (no-op for an undirected graph),
 5. run `mclust` (`GMM`).
 
 ## `R` Package
@@ -83,5 +83,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 20:24:22 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 20:40:10 2017*
 
