@@ -16,5 +16,5 @@ if (user) {
 summary(g)
 
 # GMM for a large graph takes long time (e.g., it takes >5 minutes for a graph with 10K vertices), so "kmeans" is recommended.
-system.time(Y <- gmmase(g, add.weight=TRUE, clustering="kmeans"))
+system.time(Y <- gmmase(g, add.weight=TRUE, embed = "LSE", clustering="kmeans"))
 table(Y)
