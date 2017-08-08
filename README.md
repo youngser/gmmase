@@ -51,10 +51,14 @@ To use a user graph, please try this (as shown in the code in `demo/usergraph.R`
 
 ```r
 fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-g <- read_graph(fname, format="edgelist") # please read igraph manual page for details, e.g., other graph formats it can handle, etc.
+g <- read_graph(fname, format="edgelist") 
 res <- gmmase(g)
 Y <- res$class # cluster labels
 ```
+
+The output of `gmmase` function is in `Mclust` format. Please refer to the [manual page](https://www.rdocumentation.org/packages/mclust/versions/5.3/topics/Mclust) for the details of its components.
+
+Also, please refer to the `igraph`'s [manual page](http://igraph.org/r/doc/read_graph.html) for details about other graph formats it can handle.
 
 # Software and Hardware Information
 
@@ -83,5 +87,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 20:40:10 2017*
+*prepared by <youngser@jhu.edu> on Tue Aug  8 11:38:59 2017*
 
