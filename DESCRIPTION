@@ -1,6 +1,6 @@
 Package: gmmase
 Type: Package
-Title: gmmase
+Title: GMM o ASE
 Version: 0.1.0
 Imports:
     igraph,

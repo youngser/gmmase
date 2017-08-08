@@ -65,7 +65,7 @@ Y <- res$class # cluster labels
 
 # Software and Hardware Information
 
-```{r vn,echo=TRUE, eval=TRUE}
+```{r gmmase, echo=TRUE, eval=TRUE}
 library(help='gmmase')
 sessionInfo()
 ```
