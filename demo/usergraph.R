@@ -14,5 +14,5 @@ if (user) {
 }
 summary(g)
 
-res <- gmmase(g)
+system.time(res <- gmmase(g, add.weight=TRUE))
 Y <- res$class

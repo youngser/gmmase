@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">toygraph.R</h1>
 <h4 class="author"><em>parky</em></h4>
-<h4 class="date"><em>Mon Aug 7 20:27:50 2017</em></h4>
+<h4 class="date"><em>Tue Aug 8 11:24:17 2017</em></h4>
 
 </div>
 
@@ -133,14 +133,14 @@ set.seed(123)
 pm &lt;- cbind( c(.2, .001), c(.001, .3) )
 g &lt;- sample_sbm(100, pref.matrix=pm, block.sizes=c(30,70), directed=TRUE)
 summary(g)</code></pre>
-<pre><code>## IGRAPH bd29a4e D--- 100 1620 -- Stochastic block-model
+<pre><code>## IGRAPH ba017a6 D--- 100 1620 -- Stochastic block-model
 ## + attr: name (g/c), loops (g/l)</code></pre>
-<pre class="r"><code>res &lt;- gmmase(g)</code></pre>
+<pre class="r"><code>res &lt;- gmmase(g, add.weight=TRUE)</code></pre>
 <pre><code>## 1. Finding an lcc...
-## IGRAPH 00b454e D-W- 100 1620 -- Stochastic block-model
+## IGRAPH 79e1635 D-W- 100 1620 -- Stochastic block-model
 ## + attr: name (g/c), loops (g/l), weight (e/n)
 ## 2. Passing-to-rank...
-## IGRAPH 00b454e D-W- 100 1620 -- Stochastic block-model
+## IGRAPH 79e1635 D-W- 100 1620 -- Stochastic block-model
 ## + attr: name (g/c), loops (g/l), weight (e/n)
 ## 3. Embedding the graph into dmax = 20...
 ## 4. Finding an elbow (dimension reduction)...</code></pre>
