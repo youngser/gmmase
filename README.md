@@ -46,15 +46,15 @@ The outputs of the demos are here:
 
 ## User data
 
-To use a user graph, please try this (as shown in the code in `demo/usergraph.R`)
+To use a user graph, please try this (as shown in the code in `demo/usergraph.R`).
 
 
 ```r
 fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
 g <- read_graph(fname, format="edgelist") # please read igraph manual page for details, e.g., other graph formats it can handle, etc.
+res <- gmmase(g)
+Y <- res$class # cluster labels
 ```
-
-and follow the rest of the demo procedures.
 
 # Software and Hardware Information
 
@@ -83,5 +83,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Mon Aug  7 16:28:25 2017*
+*prepared by <youngser@jhu.edu> on Mon Aug  7 20:22:12 2017*
 
