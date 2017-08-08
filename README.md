@@ -55,6 +55,14 @@ g <- read_graph(fname, format="edgelist")
 Y <- gmmase(g, dmax=20, add.weight=FALSE, use.ptr=TRUE, embed="ASE", clustering="GMM")
 ```
 
+where
+
+* `embed` can be either "ASE" or "LSE", and
+* `clustering` can be either "GMM" or "Kmeans"=="pamk", where
+    + "GMM" yields BIC curve, and
+    + "Kmeans"=="pamk" yields ASW curve.
+
+
 The output of `gmmase` function is a clustering label vector.
 
 Also, please refer to the `igraph`'s [manual page](http://igraph.org/r/doc/read_graph.html) for details about other graph formats it can handle.
@@ -86,5 +94,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Tue Aug  8 13:55:17 2017*
+*prepared by <youngser@jhu.edu> on Tue Aug  8 15:55:34 2017*
 
