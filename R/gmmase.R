@@ -26,11 +26,11 @@
 
 gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
 {
-    suppressPackageStartupMessages({
-        library(igraph)
-        library(mclust)
-        library(fpc)
-    })
+#    suppressPackageStartupMessages({
+#        library(igraph)
+#        library(mclust)
+#        library(fpc)
+#    })
 
     cat("1. Finding an lcc...\n")
     # finding the largest connected component

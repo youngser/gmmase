@@ -1,4 +1,20 @@
-## Time-stamp: <Sun Mar 20, 2016 11:49:22 YP>
+#'
+#' Given a decreasingly sorted vector, return the given number of elbows
+#'
+#' @param dat a input vector (e.g. a vector of standard deviations), or a input feature matrix
+#' @param n the number of returned elbows
+#' @param threshold either FALSE or a number. If threshold is a number, then all the elements in d that are not larger than the threshold will be ignored.
+#' @param plot logical. When T, it depicts a scree plot with highlighted elbows
+#' @param main a string of the plot title
+#'
+#' @return a vector of length \eqn{n}
+#'
+#' @references Zhu, Mu and Ghodsi, Ali (2006), Automatic dimensionality selection from
+#' the scree plot via the use of profile likelihood, Computational
+#' Statistics & Data Analysis, Volume 51 Issue 2, pp 918-930, November, 2006.
+#'
+#' @author Youngser Park <youngser@jhu.edu>
+#' @export
 
 getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="") {
     ## Given a decreasingly sorted vector, return the given number of elbows

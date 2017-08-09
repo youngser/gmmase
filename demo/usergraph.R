@@ -1,6 +1,4 @@
 suppressPackageStartupMessages({
-    library(igraph)
-    library(fpc)
     library(gmmase)
 })
 

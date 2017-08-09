@@ -1,7 +1,7 @@
 #'
 #' Run pass-to-rank on a weighted graph.
 #'
-#' It extract edge weight \eqn{W} and divide \eqn{2*R / (|E|+1)} where \eqn{R} is the rank of \eqn{W} and \eqn{|E|} is the number of edges.
+#' It extracts (non-zero) edge weight vector \eqn{W} from a graph and replaces it with \eqn{2*R / (|E|+1)} where \eqn{R} is the rank of \eqn{W} and \eqn{|E|} is the number of edges. This does 'no-op' for an unweighted graph.
 #'
 #' @param g a graph in \code{igraph} format
 #'

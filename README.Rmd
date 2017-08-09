@@ -77,7 +77,7 @@ Also, please refer to the `igraph`'s [manual page](http://igraph.org/r/doc/read_
 
 # Software and Hardware Information
 
-```{r gmmase, echo=TRUE, eval=TRUE}
+```{r gmmase, echo=TRUE, eval=TRUE, cache=FALSE}
 library(help='gmmase')
 sessionInfo()
 ```

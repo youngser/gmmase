@@ -1,6 +1,4 @@
 suppressPackageStartupMessages({
-    library(igraph)
-    library(mclust)
     library(gmmase)
 })
 
