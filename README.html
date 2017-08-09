@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Graph Spectral Clustering</h1>
 <h4 class="author"><em>Department of Applied Mathematics and Statistics <br /> Johns Hopkins University</em></h4>
-<h4 class="date"><em>Tue Aug 8 15:56:34 2017</em></h4>
+<h4 class="date"><em>Wed Aug 9 07:03:50 2017</em></h4>
 
 </div>
 
@@ -161,6 +161,7 @@ demo(usergraph)</code></pre>
 <p>To use a user graph, please try this (as shown in the code in <code>demo/usergraph.R</code>):</p>
 <pre class="r"><code>fname &lt;- readline(prompt=&quot;Enter a file name (e.g., /path/edgelist.txt): &quot;)
 g &lt;- read_graph(fname, format=&quot;edgelist&quot;) 
+E(g)$weight &lt;- runif(ecount(g), 1, 5) # add random edge weights
 Y &lt;- gmmase(g, dmax=20, add.weight=FALSE, use.ptr=TRUE, embed=&quot;ASE&quot;, clustering=&quot;GMM&quot;)</code></pre>
 <p>where</p>
 <ul>
@@ -195,7 +196,7 @@ sessionInfo()</code></pre>
 ##  [9] rmarkdown_1.6   knitr_1.16      stringr_1.2.0   digest_0.6.12  
 ## [13] evaluate_0.10</code></pre>
 <hr />
-<p><em>prepared by <a href="mailto:youngser@jhu.edu">youngser@jhu.edu</a> on Tue Aug 8 15:56:34 2017</em></p>
+<p><em>prepared by <a href="mailto:youngser@jhu.edu">youngser@jhu.edu</a> on Wed Aug 9 07:03:50 2017</em></p>
 </div>
 
 
