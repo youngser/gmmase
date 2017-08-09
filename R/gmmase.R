@@ -1,3 +1,29 @@
+#'
+#' Run spectral clustering on a (possibly directed) (possibly weighted) graph.
+#'
+#' It does
+#' 1. do a pass-to-rank for a weighted graph (\eqn{PTR}, no-op for an unweighted graph),
+#' 2. do a graph spectral embedding (\code{ASE} or \code{LSE}) with a _diagonal augmentation_,
+#' 3. do a _dimension reduction_ (\eqn{ZG}) and merge left and right vectors (no-op for an undirected graph),
+#' 4. cluster vertices (\eqn{GMM} or \eqn{Kmeans}).
+#'
+#' @param g a graph in \code{igraph} format
+#' @param dmax maximum dimension for embedding
+#' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
+#' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
+#' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
+#'
+#' @return \code{Y} labels for the clustering
+#' @examples
+#' fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
+#' g <- read_graph(fname, format="edgelist")
+#' E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
+#' Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
+#'
+#' @author Youngser Park <youngser@jhu.edu>
+#' @export
+#'
+
 gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
 {
     suppressPackageStartupMessages({
