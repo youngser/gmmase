@@ -2,13 +2,8 @@ Package: gmmase
 Type: Package
 Title: Graph Spectral Clustering
 Version: 0.1.0
-Depends:
-    R (>= 3.0)
-Depends:
-    igraph,
-    Matrix,
-    mclust,
-    fpc
+Depends: R (>= 3.0), igraph, mclust, fpc
+Imports: stats, graphics 
 Author: Youngser Park
 Maintainer: Youngser Park <youngser@jhu.edu>
 Description: This package does a graph spectral clustering.

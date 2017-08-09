@@ -9,8 +9,8 @@ if (user) {
     fname <- "g-10000.el"
     g <- read_graph(fname, format="edgelist")
 } else {
-    data(g10000)
-    g <- g10000
+    pm <- cbind( c(.2, .001), c(.001, .3) )
+    g <- sample_sbm(10000, pref.matrix=pm, block.sizes=c(3000,7000), directed=TRUE)
 }
 
 E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights

@@ -50,10 +50,10 @@ To use a user graph, please try this (as shown in the code in `demo/usergraph.R`
 
 
 ```r
-#fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-#g <- read_graph(fname, format="edgelist") 
-#E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
-#Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
+fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
+g <- read_graph(fname, format="edgelist") 
+E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
+Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
 ```
 
 where
@@ -95,5 +95,5 @@ sessionInfo()
 ```
 
 -----
-*prepared by <youngser@jhu.edu> on Wed Aug  9 11:41:39 2017*
+*prepared by <youngser@jhu.edu> on Wed Aug  9 12:04:48 2017*
 

@@ -15,13 +15,17 @@
 #'
 #' @return \code{Y} labels for the clustering
 #' @examples
-#' data(g100)
-#' E(g100)$weight <- runif(ecount(g100), 1, 5) # add random edge weights
-#' Y <- gmmase(g100, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
+#' library(igraph)
+#' pm <- cbind( c(.2, .001), c(.001, .3) )
+#' g <- sample_sbm(100, pref.matrix=pm, block.sizes=c(30,70), directed=TRUE)
+#' E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
+#' Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
 #'
 #' @author Youngser Park <youngser@jhu.edu>
 #' @export
-#'
+#' @import igraph
+#' @import mclust
+#' @import fpc
 
 gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
 {

@@ -15,7 +15,9 @@
 #'
 #' @author Youngser Park <youngser@jhu.edu>
 #' @export
-
+#' @importFrom graphics plot points
+#' @importFrom stats sd dnorm
+#'
 getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="") {
     ## Given a decreasingly sorted vector, return the given number of elbows
     ##
@@ -35,7 +37,6 @@ getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="") {
     ##   Statistics & Data Analysis, Volume 51 Issue 2, pp 918-930, November, 2006.
 
     #  if (is.unsorted(-d))
-
 
     if (is.matrix(dat)) {
         d <- sort(apply(dat,2,sd), decreasing=TRUE)
