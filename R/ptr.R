@@ -11,8 +11,6 @@
 
 ptr <- function(g)
 {
-    suppressMessages(library(igraph))
-
     if (is.weighted(g)) {
         W <- E(g)$weight
     } else {

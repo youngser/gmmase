@@ -28,10 +28,9 @@ It does
 4. cluster vertices (\eqn{GMM} or \eqn{Kmeans}).
 }
 \examples{
-fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-g <- read_graph(fname, format="edgelist")
-E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
-Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
+data(g100)
+E(g100)$weight <- runif(ecount(g100), 1, 5) # add random edge weights
+Y <- gmmase(g100, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
 
 }
 \author{

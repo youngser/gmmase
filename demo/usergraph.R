@@ -10,6 +10,7 @@ if (user) {
     g <- read_graph(fname, format="edgelist")
 } else {
     data(g10000)
+    g <- g10000
 }
 
 E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
