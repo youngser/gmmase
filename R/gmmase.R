@@ -14,12 +14,15 @@
 #' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
 #'
 #' @return \code{Y} labels for the clustering
+#' @references D.L. Sussman, M. Tang, D.E. Fishkind, and C.E. Priebe,
+#' A consistent adjacency spectral embedding for stochastic blockmodel graphs,
+#' Journal of the American Statistical Association, Vol. 107, No. 499, pp. 1119-1128, 2012.
+#'
 #' @examples
 #' library(igraph)
-#' pm <- cbind( c(.2, .001), c(.001, .3) )
-#' g <- sample_sbm(100, pref.matrix=pm, block.sizes=c(30,70), directed=TRUE)
+#' data(g)
 #' E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights
-#' Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="GMM")
+#' Y <- gmmase(g, dmax=20, use.ptr=TRUE, embed="ASE", clustering="Kmeans")
 #'
 #' @author Youngser Park <youngser@jhu.edu>
 #' @export

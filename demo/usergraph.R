@@ -6,11 +6,10 @@ suppressPackageStartupMessages({
 user <- FALSE
 if (user) {
 #    fname <- readline(prompt="Enter a file name (e.g., /path/edgelist.txt): ")
-    fname <- "g-10000.el"
+    fname <- "g.el"
     g <- read_graph(fname, format="edgelist")
 } else {
-    pm <- cbind( c(.2, .001), c(.001, .3) )
-    g <- sample_sbm(10000, pref.matrix=pm, block.sizes=c(3000,7000), directed=TRUE)
+    data(g)
 }
 
 E(g)$weight <- runif(ecount(g), 1, 5) # add random edge weights

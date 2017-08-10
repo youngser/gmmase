@@ -1,12 +1,13 @@
 Package: gmmase
-Type: Package
 Title: Graph Spectral Clustering
 Version: 0.1.0
-Depends: R (>= 3.0), igraph, mclust, fpc
-Imports: stats, graphics 
+Depends: R (>= 3.0)
+Imports: stats, graphics, igraph (>= 1.0), mclust, fpc
 Author: Youngser Park
 Maintainer: Youngser Park <youngser@jhu.edu>
-Description: This package does a graph spectral clustering.
+Description: Routines for spectral clustering on a (possibly directed) (possibly weighted) graph.
+    It performs spectral embedding of adjacency or Laplacian matrix of a given graph and then 
+    clusters vertices using either Gaussian mixture modeling or K-means.
 License: GPL (>= 2)
 URL: https://github.com/youngser/gmmase
 Encoding: UTF-8
