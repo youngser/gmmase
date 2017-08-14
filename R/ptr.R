@@ -11,6 +11,14 @@
 
 ptr <- function(g)
 {
+    if (class(g) != "igraph") {
+        if (!is.matrix(g)) stop("the input has to be either an igraph or a matrix!")
+        else {
+            if (ncol(g)==2) g <- graph_from_edgelist(g)
+            else g <- graph_from_adjacency_matrix(g, weighted = TRUE)
+        }
+    }
+
     if (is.weighted(g)) {
         W <- E(g)$weight
     } else {

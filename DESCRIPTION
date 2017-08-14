@@ -2,7 +2,7 @@ Package: gmmase
 Title: Graph Spectral Clustering
 Version: 0.1.0
 Depends: R (>= 3.0)
-Imports: stats, graphics, igraph (>= 1.0), mclust, fpc
+Imports: stats, graphics, igraph (>= 1.0), mclust, fpc, irlba
 Author: Youngser Park
 Maintainer: Youngser Park <youngser@jhu.edu>
 Description: Routines for spectral clustering on a (possibly directed) (possibly weighted) graph.

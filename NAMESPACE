@@ -2,9 +2,11 @@
 
 export(getElbows)
 export(gmmase)
+export(omni)
 export(ptr)
 import(fpc)
 import(igraph)
+import(irlba)
 import(mclust)
 importFrom(graphics,plot)
 importFrom(graphics,points)
