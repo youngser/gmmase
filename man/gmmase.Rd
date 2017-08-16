@@ -4,12 +4,15 @@
 \alias{gmmase}
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
-gmmase(g, dmax = 20, embed = "ASE", clustering = "GMM", use.ptr = TRUE)
+gmmase(g, dmax = 20, elb = 1, embed = "ASE", clustering = "GMM",
+  use.ptr = TRUE)
 }
 \arguments{
 \item{g}{a graph in \code{igraph} format}
 
 \item{dmax}{maximum dimension for embedding}
+
+\item{elb}{an index for elbow}
 
 \item{embed}{either \code{ASE} or \code{LSE}, spectral embedding method}
 
@@ -18,6 +21,10 @@ gmmase(g, dmax = 20, embed = "ASE", clustering = "GMM", use.ptr = TRUE)
 \item{use.ptr}{boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}}
 }
 \value{
+\code{g} the largest connected component of the input graph
+
+\code{mc} clustering output object
+
 \code{Y} labels for the clustering
 }
 \description{

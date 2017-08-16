@@ -9,10 +9,13 @@
 #'
 #' @param g a graph in \code{igraph} format
 #' @param dmax maximum dimension for embedding
+#' @param elb an index for elbow
 #' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
 #' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
 #' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
 #'
+#' @return \code{g} the largest connected component of the input graph
+#' @return \code{mc} clustering output object
 #' @return \code{Y} labels for the clustering
 #' @references D.L. Sussman, M. Tang, D.E. Fishkind, and C.E. Priebe,
 #' A consistent adjacency spectral embedding for stochastic blockmodel graphs,
@@ -30,7 +33,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
+gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRUE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -58,7 +61,7 @@ gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
     }
 
     cat("4. Finding an elbow (dimension reduction)...")
-    elb <- max(getElbows(ase$D)[1],2)
+    elb <- max(getElbows(ase$D)[elb],2)
     cat(", use dhat = ", elb,"\n")
     Xhat1 <- ase$X[,1:elb]
     Xhat2 <- ase$Y[,1:elb]
@@ -78,5 +81,5 @@ gmmase <- function(g, dmax=20, embed="ASE", clustering="GMM", use.ptr=TRUE)
         Y <- mc$pamobj$cluster
     }
 
-    return(Y)
+    return(list(g=g,mc=mc,Y=Y))
 }

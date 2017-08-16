@@ -9,4 +9,4 @@ E(g)$weight <- stats::runif(ecount(g), 1, 5) # add random edge weights
 summary(g)
 
 Y <- gmmase(g)
-table(Y)
+table(Y$Y)
