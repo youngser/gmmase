@@ -13,6 +13,7 @@
 #' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
 #' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
 #' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
+#' @param verbose boolean to determine whether to display an intermediate fitting progress status of \code{mclust} or not, default is \code{TRUE}
 #'
 #' @return \code{g} the largest connected component of the input graph
 #' @return \code{mc} clustering output object

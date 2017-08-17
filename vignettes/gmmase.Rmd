@@ -10,15 +10,26 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `gmmase` package does
+```{r setup, include=FALSE, results='asis'}
+source("~/Dropbox/Worm/Codes/Connectome/mbstructure/R/structure-utils.R")
+```
 
-1. generate or read a graph,
-2. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
-3. do a _graph spectral embedding_ (`ASE` or `LSE`) with a _diagonal augmentation_,
-4. do a _dimension reduction_ (`ZG`) and merge left and right vectors (no-op for an undirected graph),
-5. cluster vertices (`GMM` or `Kmeans`).
+Given a (possibly directed) (possibly weighted) graph $G=(V,E)$, the `gmmase` package does
 
-This vignette shows a demo using a connectome data with 123 vertices and 2740 edges.
+1. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
+2. do a _graph spectral embedding_ (`ASE` or `LSE`^[D.L. Sussman, M. Tang, D.E. Fishkind, and C.E. Priebe, A consistent adjacency spectral embedding for stochastic blockmodel graphs, Journal of the American Statistical Association, Vol. 107, No. 499, pp. 1119-1128, 2012.]) with a _diagonal augmentation_,
+3. do a _dimension reduction_ (`ZG`^[M. Zhu, and A. Ghodsi, Automatic dimensionality selection from the scree plot via the use of profile likelihood. Computational Statistics and Data Analysis, Vol. 51, 918–930, 2006.]) and merge left and right vectors (no-op for an undirected graph),
+4. cluster vertices (`GMM`^[MCLUST Version 4 for R: Normal Mixture Modeling for Model-Based Clustering, Classification, and Density Estimation, Technical Report no. 597, Department of Statistics, University of Washington, June 2012.] or `Kmeans`).
+
+<figure>
+<img src="gmmase.jpeg" width="700px" />
+</figure>
+
+```{r plotjpg, echo=FALSE, eval=FALSE, fig.width=8, fig.height=5}
+plot_jpeg("~/Dropbox/D3M/D3M/gmmase.jpeg")
+```
+
+This vignette shows a demo using a connectome data^[obtained from a collegue at the Jamelia Research Campus, Haward Hughes Medical Institute.] with 123 vertices and 2740 edges.
 
 ```{r, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
 library(gmmase)
@@ -26,9 +37,14 @@ suppressPackageStartupMessages(library(igraph))
 
 data("akira")
 summary(akira)
-knitr::kable(as.matrix(akira[])[1:8,1:8])
+knitr::kable(as.matrix(akira[])[1:10,1:10], digits=2)
 
 out <- gmmase(akira, dmax = 20, embed = "ASE", clustering = "GMM", verbose=FALSE)
+```
+
+Now, we are plotting a paired scatter plot colored by the clustering labels.
+
+```{r post, fig.width=7, fig.height=7, comment="#"}
 mc <- out$mc
 Xhat <- mc$data
 dhat <- ncol(Xhat)/2
@@ -39,9 +55,14 @@ df <- data.frame(Xhat, cluster=factor(class))
 
 library(ggplot2)
 library(GGally)
-ggpairs(df, columns=1:ncol(Xhat), mapping=aes(color=cluster))
+ggpairs(df, columns=1:ncol(Xhat), mapping=aes(color=cluster, alpha=0.5))
+```
+
+And the graph is also plotted grouped by the clusters.
+
+```{r plotg, fig.width=7, fig.height=7, comment="#"}
 
 plot(out$g, mark.groups=lapply(1:Khat, function(x) which(class==x)),
      edge.arrow.size=0.5, vertex.label=NA, #vertex.label.cex=0.8, 
-     vertex.size=7)
+     vertex.size=7, vertex.color=rainbow(3, alpha=.5)[class])
 ```
