@@ -2,7 +2,8 @@
 title: "Graph Spectral Clustering using `gmmase`"
 author: "JHU Team"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -27,7 +28,7 @@ data("akira")
 summary(akira)
 knitr::kable(as.matrix(akira[])[1:8,1:8])
 
-out <- gmmase(akira, dmax = 20, embed = "ASE", clustering = "GMM")
+out <- gmmase(akira, dmax = 20, embed = "ASE", clustering = "GMM", verbose=FALSE)
 mc <- out$mc
 Xhat <- mc$data
 dhat <- ncol(Xhat)/2

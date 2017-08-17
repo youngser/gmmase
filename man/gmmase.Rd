@@ -5,7 +5,7 @@
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
 gmmase(g, dmax = 20, elb = 1, embed = "ASE", clustering = "GMM",
-  use.ptr = TRUE)
+  use.ptr = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{g}{a graph in \code{igraph} format}

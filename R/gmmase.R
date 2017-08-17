@@ -33,7 +33,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRUE)
+gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRUE, verbose=TRUE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -69,7 +69,7 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRU
 
     cat("5. Clustering vertices...\n")
     if (clustering=="GMM") {
-        mc <- Mclust(Xhat,2:9)
+        mc <- Mclust(Xhat,2:9, verbose=verbose)
         plot(mc,what="BIC")
         print(summary(mc))
         Y <- mc$class
