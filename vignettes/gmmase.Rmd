@@ -1,0 +1,46 @@
+---
+title: "Graph Spectral Clustering using `gmmase`"
+author: "JHU Team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The `gmmase` package does
+
+1. generate or read a graph,
+2. do a _pass-to-rank_ for a weighted graph (`PTR`, no-op for an unweighted graph),
+3. do a _graph spectral embedding_ (`ASE` or `LSE`) with a _diagonal augmentation_,
+4. do a _dimension reduction_ (`ZG`) and merge left and right vectors (no-op for an undirected graph),
+5. cluster vertices (`GMM` or `Kmeans`).
+
+This vignette shows a demo using a connectome data with 123 vertices and 2740 edges.
+
+```{r, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+library(gmmase)
+suppressPackageStartupMessages(library(igraph))
+
+data("akira")
+summary(akira)
+knitr::kable(as.matrix(akira[])[1:8,1:8])
+
+out <- gmmase(akira, dmax = 20, embed = "ASE", clustering = "GMM")
+mc <- out$mc
+Xhat <- mc$data
+dhat <- ncol(Xhat)/2
+Khat <- mc$G
+colnames(Xhat) <- paste0(rep(c("out","in"),each=2), 1:2)
+class <- mc$classification
+df <- data.frame(Xhat, cluster=factor(class))
+
+library(ggplot2)
+library(GGally)
+ggpairs(df, columns=1:ncol(Xhat), mapping=aes(color=cluster))
+
+plot(out$g, mark.groups=lapply(1:Khat, function(x) which(class==x)),
+     edge.arrow.size=0.5, vertex.label=NA, #vertex.label.cex=0.8, 
+     vertex.size=7)
+```
