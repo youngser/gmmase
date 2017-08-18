@@ -1,5 +1,5 @@
 ---
-title: "Graph Spectral Clustering using `gmmase`"
+title: "Spectral Graph Clustering using `gmmase`"
 author: "JHU Team"
 date: "`r Sys.Date()`"
 output: 
