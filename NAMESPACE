@@ -2,6 +2,7 @@
 
 export(getElbows)
 export(gmmase)
+export(nonpar)
 export(omni)
 export(ptr)
 import(fpc)

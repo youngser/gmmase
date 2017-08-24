@@ -9,11 +9,13 @@
 #'
 #' @param g a graph in \code{igraph} format
 #' @param dmax maximum dimension for embedding
+#' @param Kmax maximum number of clusters
 #' @param elb an index for elbow
 #' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
 #' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
 #' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
 #' @param verbose boolean to determine whether to display an intermediate fitting progress status of \code{mclust} or not, default is \code{TRUE}
+#' @param doplot boolean to determine whether to draw plots or not, default is \code{TRUE}
 #'
 #' @return \code{g} the largest connected component of the input graph
 #' @return \code{mc} clustering output object
@@ -34,7 +36,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRUE, verbose=TRUE)
+gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=TRUE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -56,30 +58,55 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", use.ptr=TRU
 
     cat(paste0("3. Embedding the graph into dmax = ", dmax, "...\n"))
     if (embed=="ASE") {
-        ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
+        ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=50000))
     } else {
-        ase <- embed_laplacian_matrix(g,dmax,options=list(maxiter=10000))
+        ase <- embed_laplacian_matrix(g,dmax,type="I-DAD",options=list(maxiter=50000))
     }
 
     cat("4. Finding an elbow (dimension reduction)...")
-    elb <- max(getElbows(ase$D)[elb],2)
+    elb <- max(getElbows(ase$D,plot=doplot)[elb],2)
     cat(", use dhat = ", elb,"\n")
     Xhat1 <- ase$X[,1:elb]
-    Xhat2 <- ase$Y[,1:elb]
+    if (!is.directed(g)) Xhat2 <- NULL else Xhat2 <- ase$Y[,1:elb]
     Xhat <- cbind(Xhat1,Xhat2)
 
     cat("5. Clustering vertices...\n")
+    mc <- Y <- NULL
     if (clustering=="GMM") {
-        mc <- Mclust(Xhat,2:9, verbose=verbose)
-        plot(mc,what="BIC")
+        if (length(Kmax)>1) {
+#             for (i in 1:length(Kmax)) {
+#                 mc[[i]] <- Mclust(Xhat, G=Kmax[i], verbose=verbose)
+#                 Y[[i]] <- mc[[i]]$class
+#                 if (doplot & i==1) {
+# #                    plot(mc[[i]],what="BIC")
+#                     summary(mc)
+#                 }
+#             }
+            mc <- Mclust(Xhat, Kmax, verbose=verbose)
+        } else {
+            mc <- Mclust(Xhat,2:Kmax, verbose=verbose)
+        }
+        if (doplot) plot(mc,what="BIC")
         print(summary(mc))
         Y <- mc$class
     } else {
         usepam <- ifelse(vcount(g)>2000, FALSE, TRUE)
         crit <- ifelse(vcount(g)>2000, "multiasw", "asw")
-        mc <- pamk(Xhat,2:9,usepam=usepam, criterion=crit)
-        plot(mc$crit, type="b")
-        Y <- mc$pamobj$cluster
+        if (length(Kmax)>1) {
+            for (i in 1:length(Kmax)) {
+                mc[[i]] <- pamk(Xhat, Kmax[[i]], usepam=usepam, criterion=crit)
+                Y[[i]] <- mc[[i]]$pamobj$cluster
+                if (doplot & i==1) {
+#                    plot(mc[[i]]$crit, type="b")
+                    print(table(Y))
+                }
+            }
+        } else {
+            mc <- pamk(Xhat,2:Kmax,usepam=usepam, criterion=crit)
+            if (doplot) plot(mc$crit, type="b")
+            Y <- mc$pamobj$cluster
+            print(table(Y))
+        }
     }
 
     return(list(g=g,mc=mc,Y=Y))

@@ -5,7 +5,7 @@
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
 gmmase(g, dmax = 20, elb = 1, embed = "ASE", clustering = "GMM",
-  use.ptr = TRUE, verbose = TRUE)
+  Kmax = 9, use.ptr = TRUE, verbose = TRUE, doplot = TRUE)
 }
 \arguments{
 \item{g}{a graph in \code{igraph} format}
@@ -18,9 +18,13 @@ gmmase(g, dmax = 20, elb = 1, embed = "ASE", clustering = "GMM",
 
 \item{clustering}{either \code{GMM} or \code{Kmeans}, clustering method}
 
+\item{Kmax}{maximum number of clusters}
+
 \item{use.ptr}{boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}}
 
 \item{verbose}{boolean to determine whether to display an intermediate fitting progress status of \code{mclust} or not, default is \code{TRUE}}
+
+\item{doplot}{boolean to determine whether to draw plots or not, default is \code{TRUE}}
 }
 \value{
 \code{g} the largest connected component of the input graph

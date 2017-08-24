@@ -4,6 +4,7 @@ author: "JHU Team"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette
+
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,6 +13,8 @@ vignette: >
 
 ```{r setup, include=FALSE, results='asis'}
 source("~/Dropbox/Worm/Codes/Connectome/mbstructure/R/structure-utils.R")
+#source("http://www.cis.jhu.edu/~parky/Semipar_vs_Nonpar/utils.r")
+source("~/Dropbox/RFiles/ccc_utils.R")
 ```
 
 Given a (possibly directed) (possibly weighted) graph $G=(V,E)$, the `gmmase` package does
@@ -29,9 +32,11 @@ Given a (possibly directed) (possibly weighted) graph $G=(V,E)$, the `gmmase` pa
 plot_jpeg("~/Dropbox/D3M/D3M/gmmase.jpeg")
 ```
 
-This vignette shows a demo using a connectome data^[obtained from a collegue at the Jamelia Research Campus, Haward Hughes Medical Institute.] with 123 vertices and 2740 edges.
+# Connectome Data
 
-```{r, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+This vignette demo uses a connectome data^[K. Eichler, F. Li, A. L. Kumar, Y. Park, I. Andrade, C. Schneider-Mizell, T. Saumweber, A. Huser, D. Bonnery, B. Gerber, R. D. Fetter, J. W. Truman, C. E. Priebe, L. F. Abbott, A. Thum, M. Zlatic, and A. Cardona, "The complete connectome of a learning and memory center in an insect brain," Nature, no. 548, pp. 175-182, 2017.] with 123 vertices and 2740 edges.
+
+```{r data, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
 library(gmmase)
 suppressPackageStartupMessages(library(igraph))
 
@@ -39,12 +44,21 @@ data("akira")
 summary(akira)
 knitr::kable(as.matrix(akira[])[1:10,1:10], digits=2)
 
-out <- gmmase(akira, dmax = 20, embed = "ASE", clustering = "GMM", verbose=FALSE)
+# take induced subgraph using only CN neurons
+cn <- grep("CN", V(akira)$name)
+g.cn <- induced_subgraph(akira, cn)
+```
+
+## `gmmase`
+
+```{r gmm, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+out <- gmmase(g.cn, dmax = 20, embed = "ASE", clustering = "GMM", verbose=FALSE)
 ```
 
 Now, we are plotting a paired scatter plot colored by the clustering labels.
 
 ```{r post, fig.width=7, fig.height=7, comment="#"}
+g <- out$g
 mc <- out$mc
 Xhat <- mc$data
 dhat <- ncol(Xhat)/2
@@ -58,11 +72,219 @@ library(GGally)
 ggpairs(df, columns=1:ncol(Xhat), mapping=aes(color=cluster, alpha=0.5))
 ```
 
-And the graph is also plotted grouped by the clusters.
+## co-clustering
+
+The data provider informed us from their beahvioral experiments that following neurons should be clustered onto their own groups.
+
+- `CN4`, `CN12` `CN18`, and `CN41`,
+- `CN19`,
+- `CN40`.
 
 ```{r plotg, fig.width=7, fig.height=7, comment="#"}
+v1 <- c(4,12,18,41)
+v2 <- 40
+v3 <- 19
+vcc<- c(v1,v2,v3)
+df2 <- data.frame(name=V(g)$name, cluster=class)
+df2[vcc,]
 
-plot(out$g, mark.groups=lapply(1:Khat, function(x) which(class==x)),
+V(g)$color <- "orange"
+V(g)$color[v1] <- "magenta"
+V(g)$color[v2] <- "cyan"
+V(g)$color[v3] <- "green"
+
+plot(g, mark.groups=lapply(1:Khat, function(x) which(class==x)),
      edge.arrow.size=0.5, vertex.label=NA, #vertex.label.cex=0.8, 
-     vertex.size=7, vertex.color=rainbow(3, alpha=.5)[class])
+     vertex.size=7)#, vertex.color=rainbow(3, alpha=.5)[class])
+```
+
+This shows that we obtain the desired clustering!
+
+# MNIST Data^[http://yann.lecun.com/exdb/mnist/]
+
+There are 42000 training images of 10 digits (from 0 to 9), and we randomly select 1000 of them for our inference task. 
+
+```{r mnist}
+suppressPackageStartupMessages(library(tidyverse))
+dat <- read_csv("~/Dropbox/D3M/mnist/Data/train.csv")
+label <- dat$label
+(tab <- table(label))
+train <- dat %>% select(-1)
+
+set.seed(1234)
+numTrain <- 1000
+set.seed(1)
+samp <- sort(sample(1:nrow(train), numTrain))
+strain <- as.data.frame(train[samp,])
+slab <- label[samp]
+(tab <- table(slab))
+
+# Create a 28*28 matrix with pixel color values
+res <- sqrt(ncol(strain))
+glist <- lapply(1:numTrain, function(x) matrix(unlist(strain[x,]),byrow=T,ncol=res))
+```
+
+The following shows five random slections of each digits from the data.
+
+```{r plotg3, echo=FALSE, fig.show='hold', fig.width=7, fig.height=5, comment="#"}
+# Plot a bunch of images
+rotate <- function(x) t(apply(x, 2, rev)) # reverses (rotates the matrix)
+opar <- par(no.readonly = T)
+par(mfrow=c(5,10),mar=c(.01,.01,.01,.01))
+for (i in 1:5) {
+    tmp <- lapply(0:9,
+            function(x) {
+                ind <- sample(which(slab==x),1)
+                image(rotate(glist[[ind]]),col=grey.colors(255),axes=F)
+            })
+}
+par(opar)
+```
+```{r sim, echo=FALSE, eval=TRUE}
+suppressMessages(require(mclust))
+suppressMessages(require(knitr))
+
+image.sim.MT <- function(img1,img2,sigma=0.5)
+{
+    sim <- exp(-sum((img1-img2)^2)/sigma^2)
+    return(sim)
+}
+
+image.sim <- function(dat, sigma)
+{
+    n <- nrow(dat) # num image
+    S <- matrix(0, n, n)
+    for(i in 1:(n-1)) {
+        for (j in (i+1)) {
+            imgi <- as.numeric(dat[i,])
+            imgj <- as.numeric(dat[j,])
+            S[i,j] <- exp(-sum((imgi-imgj)^2)/(2*sigma^2))
+            S[j,i] <- S[i,j]
+        }
+    }
+    diag(S) <- 1
+    return(S)
+}
+
+calcCorr <- function(mat,useCorr=FALSE,recalc=FALSE)
+{
+    if (useCorr) { ## lag=0 of ccf!
+        if (recalc) {
+            source("~/Dropbox/RFiles/fastcorr.r")
+            ccfmat <- fastcorr(mat) # fast only on Revolution R!!
+            diag(ccfmat) <- 0
+        } else {
+            print(load("fastcorr-out.Rbin"))
+        }
+    } else { ## takes overnight
+        if (recalc) {
+            n <- nrow(mat)
+            ccfmat <- matrix(0,n,n)
+            for (i in 1:(n-1)) {
+                cat("i = ", i, "\n")
+                for (j in (i+1):n) {
+                    ccfmat[i,j] <- max(ccf(mat[i,],mat[j,],plot=FALSE)$acf)
+                }
+            }
+            save(ccfmat, file="ccfmat-5379-upper.Rbin")
+        } else {
+            print("ccfmat-5379-upper.Rbin")
+        }
+        ccfmat <- ccfmat + t(ccfmat) # should be [0,1]
+    }
+
+    return(ccfmat)
+}
+```
+
+```{r sim2, echo=FALSE, eval=FALSE}
+D <- dist(strain)
+sigma <- median(D)^2 # = 2605
+
+S <- image.sim(strain, sigma)
+image(Matrix(S))
+
+g <- graph.adjacency(S,mode="undirected",weighted=TRUE); summary(g)
+out1 <- gmmase(g, dmax = 100, embed = "ASE", Kmax = 2:20, clustering = "GMM")
+out2 <- gmmase(g, dmax = 100, embed = "LSE", Kmax = 2:20, clustering = "GMM")
+out3 <- gmmase(g, dmax = 100, embed = "ASE", Kmax = 2:20, clustering = "Kmeans")
+out4 <- gmmase(g, dmax = 100, embed = "LSE", Kmax = 2:20, clustering = "Kmeans")
+
+(ari1 <- sapply(2:20, function(x) adjustedRandIndex(slab, out1$Y[[x-1]]))); plot(ari1)
+(ari2 <- sapply(2:20, function(x) adjustedRandIndex(slab, out2$Y[[x-1]]))); plot(ari2)
+(ari3 <- sapply(2:20, function(x) adjustedRandIndex(slab, out3$Y[[x-1]]))); plot(ari3)
+(ari4 <- sapply(2:20, function(x) adjustedRandIndex(slab, out4$Y[[x-1]]))); plot(ari4)
+```
+
+We use Pearson correlation coefficient between two images as a similarity measure.
+
+```{r cor, warning=FALSE, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+corrmat <- calcCorr(as.matrix(strain), useCorr=TRUE, recalc=TRUE); range(corrmat)
+#cor.eps <- median(as.vector(corrmat)); cat("threshold = ", cor.eps, "\n")
+cor.eps <- quantile(as.vector(corrmat),0.75); cat("threshold = ", cor.eps, "\n")
+corrmat[corrmat<cor.eps] <- 0
+g <- graph.adjacency(abs(corrmat), mode="undirected", weighted=TRUE); summary(g)
+
+#out1 <- gmmase(g, dmax = 100, embed = "LSE", Kmax = 10, clustering = "GMM", verbose=FALSE)
+out1 <- gmmase(g, dmax = 100, embed = "ASE", Kmax = 10, clustering = "GMM", verbose=FALSE)
+
+Xhat1 <- out1$mc$data
+Yhat <- out1$mc$class
+df2 <- data.frame(Xhat=Xhat1, lab=as.factor(slab), cluster=as.factor(Yhat))
+ggpairs(df2, columns=1:(ncol(df2)-2), mapping=aes(color=cluster, shape=lab, alpha=0.5))
+```
+
+Now we plot nine random images of the cluster that contains each digist the most.
+
+```{r mnistplot, echo=FALSE, fig.width=7, fig.height=7, comment="#"}
+tabhat <- table(slab, Yhat); kable(tabhat)
+cat("ARI for Khat =", max(Yhat), " is ", format(adjustedRandIndex(slab, Yhat),digits=2))
+(labhat <- apply(tabhat, 1, which.max))
+#ari1 <- sapply(2:20, function(x) adjustedRandIndex(slab, out1$Y[[x-1]]))
+#plot(2:20, ari1,type="b", xlab="number of clusters", ylab="ARI")
+#(Khat <- which.max(ari1)+1)
+#(Khat <- which.max(ari1)+1)
+
+#Xhat1 <- out1$mc[[Khat-1]]$data; 
+#Yhat <- out1$mc[[Khat-1]]$classification
+set.seed(234)
+opar <- par(no.readonly = T)
+par(mfrow=c(9,10),mar=c(.01,.01,.01,.01))
+for (i in 1:9) {
+    tmp <- lapply(0:9,
+            function(x) {
+#                ind <- sample(which(slab==x & Yhat==labhat[x+1]),1)
+                ind <- sample(which(Yhat==labhat[x+1]),1)
+                image(rotate(glist[[ind]]),col=grey.colors(255),axes=F)
+            })
+}
+par(opar)
+```
+
+What if we increase $K_{max} = 20$ ?
+
+```{r gmm2, warning=FALSE, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+out2 <- Mclust(Xhat1, 10:20, verbose = FALSE)
+plot(out2, what="BIC")
+Yhat2 <- out2$class
+```
+```{r ari2, echo=FALSE, fig.width=7, fig.height=7, comment="#"}
+tabhat <- table(slab, Yhat2); kable(tabhat)
+cat("ARI for Khat =", max(Yhat2), " is ", format(adjustedRandIndex(slab, Yhat2),digits=2))
+```
+
+```{r tsne,echo=FALSE, eval=FALSE}
+numTrain <- 10000
+set.seed(1)
+samp <- sample(1:nrow(train), numTrain)
+train <- train[samp,]
+lab <- label[samp]
+
+set.seed(1) # for reproducibility
+tsne <- Rtsne(train, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)
+
+colors = rainbow(length(unique(lab)))
+names(colors) = unique(lab)
+plot(tsne$Y, t='n', main="tsne")
+text(tsne$Y, labels=lab, col=colors[lab])
 ```
