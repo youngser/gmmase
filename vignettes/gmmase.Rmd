@@ -105,19 +105,11 @@ This shows that we obtain the desired clustering!
 There are 42000 training images of 10 digits (from 0 to 9), and we randomly select 1000 of them for our inference task. 
 
 ```{r mnist}
-suppressPackageStartupMessages(library(tidyverse))
-dat <- read_csv("~/Dropbox/D3M/mnist/Data/train.csv")
-label <- dat$label
-(tab <- table(label))
-train <- dat %>% select(-1)
-
-set.seed(1234)
-numTrain <- 1000
-set.seed(1)
-samp <- sort(sample(1:nrow(train), numTrain))
-strain <- as.data.frame(train[samp,])
-slab <- label[samp]
+data(smnist)
+slab <- smnist$slab
+strain <- smnist$strain
 (tab <- table(slab))
+numTrain <- length(slab)
 
 # Create a 28*28 matrix with pixel color values
 res <- sqrt(ncol(strain))
@@ -277,14 +269,14 @@ cat("ARI for Khat =", max(Yhat2), " is ", format(adjustedRandIndex(slab, Yhat2),
 numTrain <- 10000
 set.seed(1)
 samp <- sample(1:nrow(train), numTrain)
-train <- train[samp,]
-lab <- label[samp]
+strain <- train[samp,]
+slab <- label[samp]
 
 set.seed(1) # for reproducibility
 tsne <- Rtsne(train, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)
 
-colors = rainbow(length(unique(lab)))
-names(colors) = unique(lab)
+colors = rainbow(length(unique(slab)))
+names(colors) = unique(slab)
 plot(tsne$Y, t='n', main="tsne")
-text(tsne$Y, labels=lab, col=colors[lab])
+text(tsne$Y, labels=slab, col=colors[slab])
 ```
