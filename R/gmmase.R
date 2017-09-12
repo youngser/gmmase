@@ -36,7 +36,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=TRUE)
+gmmase <- function(g, dmax=2, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -58,9 +58,10 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use
 
     cat(paste0("3. Embedding the graph into dmax = ", dmax, "...\n"))
     if (embed=="ASE") {
-        ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=50000))
+        ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
     } else {
-        ase <- embed_laplacian_matrix(g,dmax,type="I-DAD",options=list(maxiter=50000))
+        ase <- embed_laplacian_matrix(g,dmax,type="DAD",options=list(maxiter=10000))
+    #    ase <- embed_laplacian_matrix(g,dmax,type="I-DAD",options=list(maxiter=1000))
     }
 
     cat("4. Finding an elbow (dimension reduction)...")
@@ -70,7 +71,7 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use
     if (!is.directed(g)) Xhat2 <- NULL else Xhat2 <- ase$Y[,1:elb]
     Xhat <- cbind(Xhat1,Xhat2)
 
-    cat("5. Clustering vertices...\n")
+    cat("5. Clustering vertices...")
     mc <- Y <- NULL
     if (clustering=="GMM") {
         if (length(Kmax)>1) {
@@ -86,6 +87,7 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use
         } else {
             mc <- Mclust(Xhat,2:Kmax, verbose=verbose)
         }
+        cat(", Khat = ", mc$G, "\n")
         if (doplot) plot(mc,what="BIC")
         print(summary(mc))
         Y <- mc$class
@@ -93,21 +95,25 @@ gmmase <- function(g, dmax=20, elb=1, embed="ASE", clustering="GMM", Kmax=9, use
         usepam <- ifelse(vcount(g)>2000, FALSE, TRUE)
         crit <- ifelse(vcount(g)>2000, "multiasw", "asw")
         if (length(Kmax)>1) {
-            for (i in 1:length(Kmax)) {
-                mc[[i]] <- pamk(Xhat, Kmax[[i]], usepam=usepam, criterion=crit)
-                Y[[i]] <- mc[[i]]$pamobj$cluster
-                if (doplot & i==1) {
-#                    plot(mc[[i]]$crit, type="b")
-                    print(table(Y))
-                }
-            }
+#            for (i in 1:length(Kmax)) {
+#                mc[[i]] <- pamk(Xhat, Kmax[[i]], usepam=usepam, criterion=crit)
+#                Y[[i]] <- mc[[i]]$pamobj$cluster
+#                if (doplot & i==1) {
+##                    plot(mc[[i]]$crit, type="b")
+#                    print(table(Y))
+#                }
+#            }
+            mc <- pamk(Xhat, Kmax, usepam=usepam, criterion=crit)
         } else {
             mc <- pamk(Xhat,2:Kmax,usepam=usepam, criterion=crit)
-            if (doplot) plot(mc$crit, type="b")
-            Y <- mc$pamobj$cluster
-            print(table(Y))
         }
+        if (doplot) plot(mc$crit, type="b")
+        Y <- mc$pamobj$cluster
+        cat(", Khat = ", max(Y), "\n")
+        print(table(Y))
+        mc$data <- Xhat
+        mc$class <- Y
     }
 
-    return(list(g=g,mc=mc,Y=Y))
+    return(list(g=g,ase=ase,elb=elb,mc=mc,Y=Y))
 }

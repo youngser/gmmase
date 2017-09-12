@@ -4,8 +4,8 @@
 \alias{gmmase}
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
-gmmase(g, dmax = 20, elb = 1, embed = "ASE", clustering = "GMM",
-  Kmax = 9, use.ptr = TRUE, verbose = TRUE, doplot = TRUE)
+gmmase(g, dmax = 2, elb = 1, embed = "ASE", clustering = "GMM",
+  Kmax = 9, use.ptr = TRUE, verbose = TRUE, doplot = FALSE)
 }
 \arguments{
 \item{g}{a graph in \code{igraph} format}

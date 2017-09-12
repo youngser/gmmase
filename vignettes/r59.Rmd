@@ -1,0 +1,85 @@
+---
+title: "`r_59`: Unified Medical Language System Link Prediction"
+author: "JHU Team"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, results='asis'}
+source("~/Dropbox/Worm/Codes/Connectome/mbstructure/R/structure-utils.R")
+#source("http://www.cis.jhu.edu/~parky/Semipar_vs_Nonpar/utils.r")
+source("~/Dropbox/RFiles/ccc_utils.R")
+
+suppressMessages(library(knitr))
+suppressMessages(library(tidyverse))
+suppressMessages(library(igraph))
+suppressMessages(library(Matrix))
+suppressMessages(library(VN))
+suppressMessages(library(gmmase))
+#opts_knit$set(animation.fun = hook_scianimator)
+
+#suppressMessages(library(tourr))
+#suppressMessages(library(animint))
+suppressMessages(library(RColorBrewer))
+```
+
+To discover a simple biomedical ontology given data from the Unified Medical Language System (UMLS, McCray 2003). The UMLS includes a semantic network with 135 concepts and 49 binary predicates. The concepts are nodes of the graph and the predicates are relationship(edge) types. There can be multiple relationships between two concepts. Given a partial set of relationships, the task is _to predict if a relationship of a certain type exists between two nodes(concepts)_. This is an instance of the link prediction problem.
+
+>McCray, A. T. 2003. An upper level ontology for the biomedical domain. Comparative and Functional Genomics 4:80–84.
+
+
+The training data consists of the graph in gml format. It has 135 nodes. The nodes do not have attributes. Thirty percent of the original nodes has been held out for test data. The test data consists of edges with type information (`source_nodeID`, `target_nodeID`, and `linkType`). The task is _to predict 0 or 1 for each edge in the testData_. 
+
+```{r data, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+gfile <- "~/Dropbox/D3M/D3M/r59/data/raw_data/graph.gml"
+g <- read_graph(gfile,format="gml"); summary(g); is.connected(g)
+#IGRAPH 9a52d67 U--- 135 4408 -- 
+#+ attr: id (v/n), label (v/n), key (e/n), linkType (e/n)
+```
+
+```{r attr}
+df.e <- data.frame(key=E(g)$key, type=E(g)$linkType); str(df.e)
+table(df.e$key)
+table(df.e$type)
+```
+
+```{r gmm, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+out <- gmmase(g, dmax=20, embed="ASE", Kmax=20, clustering="GMM", verbose=FALSE)
+Xhat <- out$mc$data
+Yhat <- out$Y
+G <- out$mc$G
+```
+
+```{r anal, results='hold'}
+el <- get.edgelist(g)
+etypes <- NULL
+for (i in 1:G) {
+    cc <- which(Yhat==i)
+    edges <- which(el[,1] %in% cc & el[,2] %in% cc)
+    etypes[[i]] <- sort(unique(df.e$type[edges]))
+}
+names(etypes) <- lapply(1:G, function(x) which(Yhat==x))
+cat("edge types for the nodes in each cluster:\n")
+etypes
+```
+
+```{r pred, echo=FALSE, eval=FALSE}
+testg <- read_csv("~/Dropbox/D3M/D3M/r59/solution/baseline/testTargets.csv")
+
+set.seed(123)
+del <- 500
+edge.ind <- sample(ecount(g), del)
+del.edges <- el[edge.ind,]
+g2 <- delete_edges(g, edge.ind)
+pr <- predict_edges(g2)
+
+epr <- data.frame(pr$edges, prob=pr$prob); names(epr) <- c("i","j","prob")
+head(epr, 10)
+```
