@@ -49,8 +49,8 @@ suppressMessages(library(igraph))
 suppressMessages(library(Matrix))
 suppressMessages(library(VN))
 
-g1file <- "~/Dropbox/D3M/D3M/r49/data/raw_data/G1.gml"
-g2file <- "~/Dropbox/D3M/D3M/r49/data/raw_data/G2.gml"
+g1file <- "http://www.cis.jhu.edu/~parky/D3M/r49/data/raw_data/G1.gml"
+g2file <- "http://www.cis.jhu.edu/~parky/D3M/r49/data/raw_data/G2.gml"
 
 g1 <- read_graph(g1file,format = "gml"); summary(g1); is.connected(g1)
 g2 <- read_graph(g2file,format = "gml"); summary(g2); is.connected(g2)
@@ -59,6 +59,8 @@ g2 <- read_graph(g2file,format = "gml"); summary(g2); is.connected(g2)
 cl <- igraph::clusters(g1)
 g1 <- induced.subgraph(g1, which(cl$membership == which.max(cl$csize)))
 summary(g1)
+isomorphic(g1, g2)
+
 # id == nodeID
 # revise node ids
 V(g1)$id <- 1:vcount(g1)
@@ -66,8 +68,8 @@ V(g2)$id <- 1:vcount(g2)
 ```
 
 ```{r seed, message=FALSE, comment="#"}
-train1 <- read_csv("~/Dropbox/D3M/D3M/r49/data/trainData.csv")
-train2 <- read_csv("~/Dropbox/D3M/D3M/r49/data/trainTargets.csv")
+train1 <- read_csv("http://www.cis.jhu.edu/~parky/D3M/r49/data/trainData.csv")
+train2 <- read_csv("http://www.cis.jhu.edu/~parky/D3M/r49/data/trainTargets.csv")
 #test <- read_csv("~/Dropbox/D3M/D3M/r49/solution/baseline/testTargets.csv")
 train <- left_join(train1,train2, by="d3mIndex"); train
 ```
@@ -78,8 +80,9 @@ matched.id1 <- match(train$G1.nodeID, V(g1)$nodeID) # 151
 perm.g1 <- invPerm(c(matched.id1, (1:vcount(g1))[-matched.id1]))
 matched.id2 <- unique(match(train$G2.nodeID, V(g2)$nodeID)) # 145
 perm.g2 <- invPerm(c(matched.id2, (1:vcount(g2))[-matched.id2]))
-g1.new <- permute.vertices(g1, perm.g1)
-g2.new <- permute.vertices(g2, perm.g2)
+g1.new <- permute.vertices(g1, perm.g1); head(V(g1.new)$nodeID, 10)
+g2.new <- permute.vertices(g2, perm.g2); head(V(g2.new)$nodeID, 10)
+
 g2.sub <- induced.subgraph(g2.new, 1:nrow(train)); summary(g2.sub)
 ```
 
@@ -99,7 +102,7 @@ soft seeding just initializes at the seeds, but allows them to change in the cou
 A1 <- as.matrix(g1.new[])
 A2 <- as.matrix(g2.new[])
 n <- nrow(A1)
-m <- nrow(A2)
+m <- nrow(train)
 gamma <- 1
 s <- 10 # numseed
 M <- rsp(n-s,gamma)
@@ -119,15 +122,17 @@ set.seed(12345)
 A1 <- as.matrix(g1.new[])
 A2 <- as.matrix(g2.new[])
 n <- nrow(A1)
-m <- nrow(A2)
+m <- nrow(train)
 gamma <- 1
 
 nmc <- 100
-niter <- 30
+niter <- 100
 svec <- seq(0, 150, by=30)
 ```
 ```{r sgm, echo=TRUE, eval=FALSE}
-method <- "hard"
+method <- "soft"
+nmc <- ifelse(method=="soft", 100, 1)
+niter <- ifelse(method=="soft", 100, 30)
 
 for (s in svec) {
     cat("Working on s = ", s, "\n")
@@ -156,9 +161,14 @@ for (s in svec) {
 }
 ```
 ```{r acollect21,echo=FALSE, fig.show='hold', fig.width=7, fig.height=7, comment="#"}
+svec <- seq(0, 150, by=30)
+
+# soft
+nmc <- 100
+niter <- 100
 matchV <- matchE <- f <- NULL
 for (s in svec) {
-    load(paste0("~/Dropbox/D3M/D3M/r49/mc-r49-s",s,"-nmc",nmc,"-niter",niter,".Rbin"))
+    load(paste0("~/Dropbox/D3M/r49/mc-r49-s",s,"-nmc",nmc,"-niter",niter,"-soft.Rbin"))
     matchV <- c(matchV, unlist(sapply(mc,"[",1)))
     matchE <- c(matchE, unlist(sapply(mc,"[",2))/2)
     f <- c(f, unlist(sapply(mc,"[",3)))
@@ -172,9 +182,10 @@ df3 <- df %>% group_by(s) %>% arrange(f) %>% mutate(init2=order(f)) %>% select(-
 
 # "hard"
 niter <- 30
+nmc <- 1
 matchV <- matchE <- f <- NULL
 for (s in svec) {
-    load(paste0("~/Dropbox/D3M/D3M/r49/mc-r49-s",s,"-nmc1-niter",niter,"-hard.Rbin")); nmc=100
+    load(paste0("~/Dropbox/D3M/r49/mc-r49-s",s,"-nmc1-niter",niter,"-hard.Rbin")); nmc=100
     matchV <- c(matchV, rep(unlist(sapply(mc,"[",1)),nmc))
     matchE <- c(matchE, rep(unlist(sapply(mc,"[",2)),nmc))
     f <- c(f, rep(unlist(sapply(mc,"[",3)),nmc))
