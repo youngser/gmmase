@@ -41,8 +41,8 @@ demo(usergraph)
 
 The outputs of the demos are here:
 
-* [toygraph](http://www.cis.jhu.edu/~parky/gmmase/demo/toygraph.html)
-* [usergraph](http://www.cis.jhu.edu/~parky/gmmase/demo/usergraph.html)
+* [toygraph](http://www.cis.jhu.edu/~parky/D3M/gmmase/demo/toygraph.html)
+* [usergraph](http://www.cis.jhu.edu/~parky/D3M/gmmase/demo/usergraph.html)
 
 ## User data
 
