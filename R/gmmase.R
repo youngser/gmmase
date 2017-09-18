@@ -60,7 +60,7 @@ gmmase <- function(g, dmax=2, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.
     if (embed=="ASE") {
         ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
     } else {
-        ase <- embed_laplacian_matrix(g,dmax,type="DAD",options=list(maxiter=10000))
+        ase <- embed_laplacian_matrix(g,dmax,options=list(maxiter=10000))
     #    ase <- embed_laplacian_matrix(g,dmax,type="I-DAD",options=list(maxiter=1000))
     }
 
