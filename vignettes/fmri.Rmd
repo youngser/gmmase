@@ -6,6 +6,12 @@ output:
     rmarkdown::html_vignette:
         toc: yes
         fig_caption: yes
+  pdf_document:
+    fig_caption: yes
+    fig_crop: no
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 vignette: >
   \VignetteIndexEntry{Vignette Title}
   \VignetteEncoding{UTF-8}

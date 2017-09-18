@@ -12,7 +12,7 @@
 
 <meta name="author" content="JHU Team" />
 
-<meta name="date" content="2017-09-14" />
+<meta name="date" content="2017-09-17" />
 
 <title>r_49: Facebook Relationship Prediction</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore"><code>r_49</code>: Facebook Relationship Prediction</h1>
 <h4 class="author"><em>JHU Team</em></h4>
-<h4 class="date"><em>2017-09-14</em></h4>
+<h4 class="date"><em>2017-09-17</em></h4>
 
 
 <div id="TOC">
@@ -106,12 +106,12 @@ g1file &lt;-<span class="st"> &quot;http://www.cis.jhu.edu/~parky/D3M/r49/data/r
 g2file &lt;-<span class="st"> &quot;http://www.cis.jhu.edu/~parky/D3M/r49/data/raw_data/G2.gml&quot;</span>
 
 g1 &lt;-<span class="st"> </span><span class="kw">read_graph</span>(g1file,<span class="dt">format =</span> <span class="st">&quot;gml&quot;</span>); <span class="kw">summary</span>(g1); <span class="kw">is.connected</span>(g1)</code></pre></div>
-<pre><code># IGRAPH 19ff348 U--- 1000 5521 -- 
+<pre><code># IGRAPH d521642 U--- 1000 5521 -- 
 # + attr: id (v/n), label (v/n), nodeID (v/n), f0 (v/n), f1 (v/n),
 # | f2 (v/n), f3 (v/n), f4 (v/n), class (v/n)</code></pre>
 <pre><code># [1] FALSE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span><span class="kw">read_graph</span>(g2file,<span class="dt">format =</span> <span class="st">&quot;gml&quot;</span>); <span class="kw">summary</span>(g2); <span class="kw">is.connected</span>(g2)</code></pre></div>
-<pre><code># IGRAPH d181d62 U--- 755 5138 -- 
+<pre><code># IGRAPH 5509411 U--- 755 5138 -- 
 # + attr: id (v/n), label (v/n), f0 (v/n), f1 (v/n), f2 (v/n), f3
 # | (v/n), f4 (v/n), class (v/n), nodeID (v/n)</code></pre>
 <pre><code># [1] TRUE</code></pre>
@@ -119,7 +119,7 @@ g1 &lt;-<span class="st"> </span><span class="kw">read_graph</span>(g1file,<span
 cl &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">clusters</span>(g1)
 g1 &lt;-<span class="st"> </span><span class="kw">induced.subgraph</span>(g1, <span class="kw">which</span>(cl<span class="op">$</span>membership <span class="op">==</span><span class="st"> </span><span class="kw">which.max</span>(cl<span class="op">$</span>csize)))
 <span class="kw">summary</span>(g1)</code></pre></div>
-<pre><code># IGRAPH a436cec U--- 755 5138 -- 
+<pre><code># IGRAPH 549c686 U--- 755 5138 -- 
 # + attr: id (v/n), label (v/n), nodeID (v/n), f0 (v/n), f1 (v/n),
 # | f2 (v/n), f3 (v/n), f4 (v/n), class (v/n)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">isomorphic</span>(g1, g2)</code></pre></div>
@@ -156,7 +156,7 @@ g1.new &lt;-<span class="st"> </span><span class="kw">permute.vertices</span>(g1
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2.new &lt;-<span class="st"> </span><span class="kw">permute.vertices</span>(g2, perm.g2); <span class="kw">head</span>(<span class="kw">V</span>(g2.new)<span class="op">$</span>nodeID, <span class="dv">10</span>)</code></pre></div>
 <pre><code>#  [1]  32 433 831 616 515 796 457 680 401 737</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2.sub &lt;-<span class="st"> </span><span class="kw">induced.subgraph</span>(g2.new, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(train)); <span class="kw">summary</span>(g2.sub)</code></pre></div>
-<pre><code># IGRAPH 2b16eeb U--- 151 215 -- 
+<pre><code># IGRAPH 3e5da74 U--- 151 215 -- 
 # + attr: id (v/n), label (v/n), f0 (v/n), f1 (v/n), f2 (v/n), f3
 # | (v/n), f4 (v/n), class (v/n), nodeID (v/n)</code></pre>
 </div>
