@@ -145,13 +145,14 @@ for (s in svec) {
     mc <- foreach (i=1:nmc) %dopar% {
         ## S is a starting point for softseeding
         if (method=="soft") {
-            M <- rsp(n-s,gamma)
-            S <- diag(n);
-            S[(s+1):n,(s+1):n] <- M
+#            M <- rsp(n-s,gamma)
+#            S <- diag(n);
+#            S[(s+1):n,(s+1):n] <- M
+#            out <- sgm(A2,A1,0,start=S,pad=0,iteration=niter)
             out <- sgm(A2,A1,0,start=S,pad=0,iteration=niter)
         } else { # "hard"
-            S <-matrix(1/(n-s), n-s, n-s) 
-            out <- sgm(A2,A1,s,start=S,pad=0,iteration=niter)
+            S <- matrix(1/(n-s), n-s, n-s) 
+            out <- sgm(A2,A1,0,start=S,pad=0,iteration=niter)
             if (s > 0) {
                 out$corr <- c(1:s,out$corr)  
             }

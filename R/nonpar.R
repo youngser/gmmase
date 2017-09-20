@@ -25,12 +25,12 @@ nonpar <- function(Xhat1,Xhat2,sigma=0.5)
     #    Tij <- find.transform(Xhat1, Xhat2)
     #    Sij <- kernel.stat(Xhat1 %*% Tij, Xhat2, sigma)
     Sij1 <- kernel.stat(Xhat1, Xhat2, sigma)
-    Sij2 <- kernel.stat(Xhat1 %*% diag(c(-1,1)), Xhat2, sigma)
-    Sij3 <- kernel.stat(Xhat1 %*% diag(c(1,-1)), Xhat2, sigma)
-    Sij4 <- kernel.stat(Xhat1 %*% diag(c(-1,-1)), Xhat2, sigma)
-    Sij <- min(Sij1, Sij2, Sij3, Sij4)
+#    Sij2 <- kernel.stat(Xhat1 %*% diag(c(-1,1)), Xhat2, sigma)
+#    Sij3 <- kernel.stat(Xhat1 %*% diag(c(1,-1)), Xhat2, sigma)
+#    Sij4 <- kernel.stat(Xhat1 %*% diag(c(-1,-1)), Xhat2, sigma)
+#    Sij <- min(Sij1, Sij2, Sij3, Sij4)
 
-    return(Sij)
+    return(Sij1)
 }
 
 kernel.stat <- function(X,Y,sigma=0.2){
