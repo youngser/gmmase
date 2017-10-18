@@ -36,7 +36,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=2, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
+gmmase <- function(g, dmax=2, elb=1, lcc=TRUE, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -44,10 +44,12 @@ gmmase <- function(g, dmax=2, elb=1, embed="ASE", clustering="GMM", Kmax=9, use.
 #        library(fpc)
 #    })
 
-    cat("1. Finding an lcc...\n")
-    # finding the largest connected component
-    cl <- igraph::clusters(g)
-    g <- induced.subgraph(g, which(cl$membership == which.max(cl$csize)))
+    if (lcc) {
+        cat("1. Finding an lcc...\n")
+        # finding the largest connected component
+        cl <- igraph::clusters(g)
+        g <- induced.subgraph(g, which(cl$membership == which.max(cl$csize)))
+    }
     summary(g)
 
     if (is.weighted(g) & use.ptr) {
