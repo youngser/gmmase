@@ -18,7 +18,7 @@
 #' @importFrom graphics plot points
 #' @importFrom stats sd dnorm
 #'
-getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="") {
+getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="", ...) {
     ## Given a decreasingly sorted vector, return the given number of elbows
     ##
     ## Args:
@@ -70,10 +70,10 @@ getElbows <- function(dat, n = 3, threshold = FALSE, plot = TRUE, main="") {
     if (plot==TRUE) {
         if (is.matrix(dat)) {
             sdv <- d # apply(dat,2,sd)
-            plot(sdv,type="b",xlab="dim",ylab="stdev",main=main)
+            plot(sdv,type="b",xlab="dim",ylab="stdev",main=main,...)
             points(q,sdv[q],col=2,pch=19)
         } else {
-            plot(dat, type="b",main=main)
+            plot(dat, type="b",main=main,...)
             points(q,dat[q],col=2,pch=19)
         }
     }

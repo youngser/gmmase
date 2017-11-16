@@ -4,7 +4,7 @@
 \alias{getElbows}
 \title{Given a decreasingly sorted vector, return the given number of elbows}
 \usage{
-getElbows(dat, n = 3, threshold = FALSE, plot = TRUE, main = "")
+getElbows(dat, n = 3, threshold = FALSE, plot = TRUE, main = "", ...)
 }
 \arguments{
 \item{dat}{a input vector (e.g. a vector of standard deviations), or a input feature matrix}
