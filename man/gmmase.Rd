@@ -4,7 +4,7 @@
 \alias{gmmase}
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
-gmmase(g, dmax = 2, elb = 1, lcc = TRUE, embed = "ASE",
+gmmase(g, dmax = 2, elb = 1, abs = FALSE, lcc = TRUE, embed = "ASE",
   clustering = "GMM", Kmax = 9, use.ptr = TRUE, verbose = TRUE,
   doplot = FALSE)
 }
@@ -14,6 +14,8 @@ gmmase(g, dmax = 2, elb = 1, lcc = TRUE, embed = "ASE",
 \item{dmax}{maximum dimension for embedding}
 
 \item{elb}{an index for elbow}
+
+\item{abs}{a boolean to take abs on elbow finder or not}
 
 \item{embed}{either \code{ASE} or \code{LSE}, spectral embedding method}
 

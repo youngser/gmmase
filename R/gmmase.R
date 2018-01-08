@@ -11,6 +11,7 @@
 #' @param dmax maximum dimension for embedding
 #' @param Kmax maximum number of clusters
 #' @param elb an index for elbow
+#' @param abs a boolean to take abs on elbow finder or not
 #' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
 #' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
 #' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
@@ -36,7 +37,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=2, elb=1, lcc=TRUE, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
+gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -67,7 +68,8 @@ gmmase <- function(g, dmax=2, elb=1, lcc=TRUE, embed="ASE", clustering="GMM", Km
     }
 
     cat("4. Finding an elbow (dimension reduction)...")
-    elb <- max(getElbows(ase$D,plot=doplot)[elb],2)
+    if (abs) D <- abs(ase$D) else D <- ase$D
+    elb <- max(getElbows(D,plot=doplot)[elb],2)
     cat(", use dhat = ", elb,"\n")
     Xhat1 <- ase$X[,1:elb]
     if (!is.directed(g)) Xhat2 <- NULL else Xhat2 <- ase$Y[,1:elb]
