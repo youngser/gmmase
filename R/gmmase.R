@@ -14,7 +14,7 @@
 #' @param abs a boolean to take abs on elbow finder or not
 #' @param embed either \code{ASE} or \code{LSE}, spectral embedding method
 #' @param clustering either \code{GMM} or \code{Kmeans}, clustering method
-#' @param use.ptr boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}
+#' @param weight either \code{ptr} pr \code{binary} or \code{raw} to determine whether to perform pass-to-rank or not, default is \code{raw}
 #' @param verbose boolean to determine whether to display an intermediate fitting progress status of \code{mclust} or not, default is \code{TRUE}
 #' @param doplot boolean to determine whether to draw plots or not, default is \code{TRUE}
 #'
@@ -37,7 +37,7 @@
 #' @import mclust
 #' @import fpc
 
-gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clustering="GMM", Kmax=9, use.ptr=TRUE, verbose=TRUE, doplot=FALSE)
+gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clustering="GMM", Kmax=9, weight="raw", verbose=TRUE, doplot=FALSE)
 {
 #    suppressPackageStartupMessages({
 #        library(igraph)
@@ -53,18 +53,24 @@ gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clusterin
     }
     summary(g)
 
-    if (is.weighted(g) & use.ptr) {
-        cat("2. Passing-to-rank...\n")
-        g <- ptr(g)
-        summary(g)
+    if (is.weighted(g)) {
+        if (weight=="ptr") {
+            cat("2. Passing-to-rank...\n")
+            g <- ptr(g)
+        } else if (weight=="binary") {
+            cat("2. Binarizing the edge weight...\n")
+            E(g)$weight <- ifelse(E(g)$weight>0,1,0)
+        } else {
+            cat("2. Using the raw edge weight...\n")
+        }
     }
 
     cat(paste0("3. Embedding the graph into dmax = ", dmax, "...\n"))
     if (embed=="ASE") {
         ase <- embed_adjacency_matrix(g,dmax,options=list(maxiter=10000))
     } else {
-        ase <- embed_laplacian_matrix(g,dmax,options=list(maxiter=10000))
-    #    ase <- embed_laplacian_matrix(g,dmax,type="I-DAD",options=list(maxiter=1000))
+#        ase <- embed_laplacian_matrix(g,dmax,options=list(maxiter=10000))
+        ase <- embed_laplacian_matrix(g,dmax,type="DAD",options=list(maxiter=1000))
     }
 
     cat("4. Finding an elbow (dimension reduction)...")
@@ -77,7 +83,7 @@ gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clusterin
 
     cat("5. Clustering vertices...")
     mc <- Y <- NULL
-    if (clustering=="GMM") {
+    if (clustering %in% c("GMM","gmm")) {
         if (length(Kmax)>1) {
 #             for (i in 1:length(Kmax)) {
 #                 mc[[i]] <- Mclust(Xhat, G=Kmax[i], verbose=verbose)
@@ -95,6 +101,8 @@ gmmase <- function(g, dmax=2, elb=1, abs=FALSE, lcc=TRUE, embed="ASE", clusterin
         if (doplot) plot(mc,what="BIC")
         print(summary(mc))
         Y <- mc$class
+    } else if (clustering %in% c("DA", "da")) {
+
     } else {
         usepam <- ifelse(vcount(g)>2000, FALSE, TRUE)
         crit <- ifelse(vcount(g)>2000, "multiasw", "asw")

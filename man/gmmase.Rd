@@ -5,7 +5,7 @@
 \title{Run spectral clustering on a (possibly directed) (possibly weighted) graph.}
 \usage{
 gmmase(g, dmax = 2, elb = 1, abs = FALSE, lcc = TRUE, embed = "ASE",
-  clustering = "GMM", Kmax = 9, use.ptr = TRUE, verbose = TRUE,
+  clustering = "GMM", Kmax = 9, weight = "raw", verbose = TRUE,
   doplot = FALSE)
 }
 \arguments{
@@ -23,7 +23,7 @@ gmmase(g, dmax = 2, elb = 1, abs = FALSE, lcc = TRUE, embed = "ASE",
 
 \item{Kmax}{maximum number of clusters}
 
-\item{use.ptr}{boolean to determine whether to perform pass-to-rank or not, default is \code{TRUE}}
+\item{weight}{either \code{ptr} pr \code{binary} or \code{raw} to determine whether to perform pass-to-rank or not, default is \code{raw}}
 
 \item{verbose}{boolean to determine whether to display an intermediate fitting progress status of \code{mclust} or not, default is \code{TRUE}}
 
